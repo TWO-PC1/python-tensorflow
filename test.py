@@ -2,13 +2,34 @@
 import pygame 
 import numpy as np
 import random
+import tkinter as tk
+import tkinter.messagebox as messagebox
+
+gui = tk.Tk()
+gui.title('snake game')
+
+def close():
+    if messagebox.askokcancel("Quit","정말 나가시겠습니까?"):
+        exit()
+
+       
+
+def start():
+    gui.destroy()
 
 
 
+label =tk.Label(text='지렁이 게임!')
+label.pack()
+button = tk.Button(text='게임시작',command=start)
+button.pack()
+# gui.protocol("WM_DELETE_WINDOW",close())
+gui.mainloop()
 clock = pygame.time.Clock()
 WINDOW_WIDTH = 600 #가로 너비
 WINDOW_HEIGHT = 600 #세로 너비
 SNAKE_SIZE = 20
+SPEED = 20 # 수정해
 score =0
 
 
@@ -39,32 +60,19 @@ state2 = np.array([snake2[0][0], snake2[0][1], food[0], food[1],
                   snake2[-1][0], snake2[-1][1]]) #기본
 
 def move_snake(snake, direction):
-    if snake == snake2:
-        x, y = snake[0]
-        if direction == 'up':
-            y -= SNAKE_SIZE
-        elif direction == 'down':
-            y += SNAKE_SIZE
-        elif direction == 'left':
-            x -= SNAKE_SIZE
-        elif direction == 'right':
-            x += SNAKE_SIZE
-        snake2.insert(0, (x, y))
-        snake2.pop()
-        return snake
-    else:
-        x, y = snake[0]
-        if direction == 'up':
-            y -= SNAKE_SIZE
-        elif direction == 'down':
-            y += SNAKE_SIZE
-        elif direction == 'left':
-            x -= SNAKE_SIZE
-        elif direction == 'right':
-            x += SNAKE_SIZE
-        snake.insert(0, (x, y))
-        snake.pop()
-        return snake
+    
+    x, y = snake[0]
+    if direction == 'up':
+        y -= SPEED 
+    elif direction == 'down':
+        y += SPEED
+    elif direction == 'left':
+        x -= SPEED
+    elif direction == 'right':  
+        x += SPEED
+    snake.insert(0, (x, y))
+    snake.pop()
+    return snake
 
 
 def eat_food(snake, food):
@@ -102,7 +110,7 @@ def start_game():
     
     food = spawn_food()
     while True:
-        clock.tick(8)
+        clock.tick(10)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print(f'Score: {score}')
@@ -147,16 +155,16 @@ def start_game():
         
        
         
-        if snake[0] in snake[1:] or snake[0][0] < 0 or snake[0][0] > WINDOW_WIDTH - SNAKE_SIZE or snake[0][1] < 0 or snake[0][1] > WINDOW_HEIGHT - SNAKE_SIZE or snake[0] in snake2[0:]:#죽는 경우
+        if snake[0] in snake[1:] or snake[0][0] < 0 or snake[0][0] > WINDOW_WIDTH - SNAKE_SIZE or snake[0][1] < 0 or snake[0][1] > WINDOW_HEIGHT - SNAKE_SIZE or snake[0] in snake2[:]:#죽는 경우
             snake = [(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)]  # 뱀의 길이를 초기화
             direction = random.choice(['up', 'down', 'left', 'right'])  # 방향을 무작위로 설정
 
-            continue  # while 루프의 처음으로 이동
-        if snake2[0] in snake2[1:] or snake2[0][0] < 0 or snake2[0][0] > WINDOW_WIDTH - SNAKE_SIZE or snake2[0][1] < 0 or snake2[0][1] > WINDOW_HEIGHT - SNAKE_SIZE or snake2[0] in snake[0:]:#죽는 경우
+              
+        if snake2[0] in snake2[1:] or snake2[0][0] < 0 or snake2[0][0] > WINDOW_WIDTH - SNAKE_SIZE or snake2[0][1] < 0 or snake2[0][1] > WINDOW_HEIGHT - SNAKE_SIZE or snake2[0] in snake[:]:#죽는 경우
             snake2 = [(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)]  # 뱀의 길이를 초기화
             direction2 = random.choice(['up', 'down', 'left', 'right'])  # 방향을 무작위로 설정
 
-            continue  # while 루프의 처음으로 이동
+              
 
 
         if eat_food(snake, food):
@@ -204,8 +212,8 @@ def start_game():
         for s in snake2:
             pygame.draw.rect(window, (0, 0, 255), (s[0], s[1], SNAKE_SIZE, SNAKE_SIZE))
         pygame.display.flip()
-        print(state)
         print(snake)
+        print(snake2)
     
         
 
