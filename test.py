@@ -5,6 +5,7 @@ import random
 import tkinter as tk
 import tkinter.messagebox as messagebox
 
+gamestart = 0
 gui = tk.Tk()
 gui.title('snake game')
 
@@ -15,8 +16,9 @@ def close():
        
 
 def start():
+    global gamestart
     gui.destroy()
-
+    gamestart = 1
 
 
 label =tk.Label(text='지렁이 게임!')
@@ -101,8 +103,10 @@ def spawn_food():
 
 
 window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
+
+
 pygame.init()
-print(state)
+
 
 def start_game():
     global snake,snake2, direction,direction2,food,WINDOW_WIDTH,WINDOW_HEIGHT,state,state2
@@ -171,15 +175,19 @@ def start_game():
             food = spawn_food()
             state[2] = food[0]
             state[3] = food[1]
-            x,y =snake[0]
+            state2[2] = food[0]
+            state2[3] = food[1]
+            # x,y =snake[0]
             #뱀 추가
 
         if eat_food(snake2, food):
             food = spawn_food()
             state2[2] = food[0]
             state2[3] = food[1]
-            x,y =snake2[0]
-            snake2.insert(0, (x, y))                     
+            state[2] = food[0]
+            state[3] = food[1]
+            # x,y =snake2[0]
+
             
         
             
@@ -212,12 +220,13 @@ def start_game():
         for s in snake2:
             pygame.draw.rect(window, (0, 0, 255), (s[0], s[1], SNAKE_SIZE, SNAKE_SIZE))
         pygame.display.flip()
-        print(snake)
-        print(snake2)
+        print(state)
+        print(state2)
     
         
 
-while True:
+
+if gamestart == 1:
     start_game()
 
     print(f'Score: {score}')
