@@ -1,0 +1,102 @@
+import pygame
+import numpy as np
+
+
+
+BOARD_SIZE = 15
+board = np.zeros([BOARD_SIZE, BOARD_SIZE], dtype=str)
+
+WIDTH, HEIGHT = 640, 640
+STONE_SIZE = int(WIDTH / BOARD_SIZE)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BROWN = (160, 90, 40)
+pygame.init()
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("오목 게임")
+
+def draw_board():
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
+            pygame.draw.rect(screen, BLACK, (j*STONE_SIZE, i*STONE_SIZE, STONE_SIZE, STONE_SIZE), 2)
+            if board[i][j] == '1':
+                pygame.draw.circle(screen, BLACK, (j*STONE_SIZE+STONE_SIZE//2, i*STONE_SIZE+STONE_SIZE//2), STONE_SIZE//2-2)
+            elif board[i][j] == '2':
+                pygame.draw.circle(screen, WHITE, (j*STONE_SIZE+STONE_SIZE//2, i*STONE_SIZE+STONE_SIZE//2), STONE_SIZE//2-2)
+# def draw_board():
+#     for i in range(BOARD_SIZE):
+#         for j in range(BOARD_SIZE):
+#             pygame.draw.rect(screen, BLACK, (i*STONE_SIZE, j*STONE_SIZE, STONE_SIZE, STONE_SIZE), 2)
+#             if board[i][j] == '1':
+#                 pygame.draw.circle(screen, BLACK, (i*STONE_SIZE+STONE_SIZE//2, j*STONE_SIZE+STONE_SIZE//2), STONE_SIZE//2-2)
+#             elif board[i][j] == '2':
+#                 pygame.draw.circle(screen, WHITE, (i*STONE_SIZE+STONE_SIZE//2, j*STONE_SIZE+STONE_SIZE//2), STONE_SIZE//2-2)
+def cross():
+    for i in range(BOARD_SIZE-4):
+        for j in range(4, BOARD_SIZE):
+            if board[i][j] != "" and \
+            board[i][j] == board[i+1][j-1] and \
+            board[i+1][j-1] == board[i+2][j-2] and \
+            board[i+2][j-2] == board[i+3][j-3] and \
+            board[i+3][j-3] == board[i+4][j-4]:
+                    print('역대각선 yes!')
+                    return True
+
+    for i in range(4, BOARD_SIZE):
+        for j in range(4, BOARD_SIZE):
+            if board[i][j] != "" and \
+            board[i][j] == board[i-1][j-1] and \
+            board[i-1][j-1] == board[i-2][j-2] and \
+            board[i-2][j-2] == board[i-3][j-3] and \
+            board[i-3][j-3] == board[i-4][j-4]:
+                print('정대각선yes!')
+                return True
+
+    for i in range(BOARD_SIZE):
+        for j in range( BOARD_SIZE-4):
+            if board[i][j]!= "" and \
+            board[i][j] == board[i][j+1] and \
+            board[i][j+1] == board[i][j+2] and \
+            board[i][j+2] == board[i][j+3] and \
+            board[i][j+3] == board[i][j+4]:
+                print('가로yes!')
+                return True
+    for j in range(BOARD_SIZE):
+        for i in range( BOARD_SIZE-4):
+            if board[i][j]!= "" and \
+            board[i][j] == board[i+1][j] and \
+            board[i+1][j] == board[i+2][j] and \
+            board[i+2][j] == board[i+3][j] and \
+            board[i+3][j] == board[i+4][j]:
+                print('세로yes!')
+                return True
+# for i in range(11):
+#     board[i][0]='a'#y,x
+
+current_player=1
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos
+            j, i = int(x / STONE_SIZE), int(y / STONE_SIZE)
+            print(i,j)
+            if board[i][j] == "":
+                board[i][j] = current_player
+                if cross():
+                    print("플레이어 {} 승리!".format(current_player))
+                    running = False
+                current_player = 3 - current_player  # 1 -> 2, 2 -> 1
+            else:
+                print('이미 돌 있다')
+      # 화면 업데이트
+    screen.fill(BROWN)
+    draw_board()
+    pygame.display.update()
+
+cross()
+print(board)
