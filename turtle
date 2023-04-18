@@ -1,0 +1,37 @@
+import turtle as t
+
+
+
+
+def move(length,shape,angle,count,color,size,any,pen):
+    t.color(color)
+    t.pensize(size)
+    check=0
+    t.pendown()
+    while check <count:
+        check+=1
+        if shape=='circle':
+            t.circle(length)
+        elif shape=='f':
+            if any =='right':
+                t.right(angle)
+            elif any == 'left':
+                t.left(angle)
+            t.forward(length)
+        else:
+            print('올바른 값을 입력하세요')
+    if pen ==1:
+        t.penup()
+
+def godmove(count,code):
+    check=0
+    while check <count:
+        check+=1
+        eval(code)
+    
+move(100,'f',60,1,'orange',3,'left',1)
+move(100,'f',120,1,'orange',3,'left',1)
+godmove(5,"move(100,'f',60,1,'orange',3,'right',1),move(100,'f',120,1,'orange',3,'left',1)")
+
+
+
