@@ -1,6 +1,6 @@
 import pygame
 import numpy as np
-
+import time
 
 
 BOARD_SIZE = 15
@@ -11,6 +11,7 @@ STONE_SIZE = int(WIDTH / BOARD_SIZE)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BROWN = (160, 90, 40)
+GOLD = (255,215,0)
 pygame.init()
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -24,6 +25,8 @@ def draw_board():
                 pygame.draw.circle(screen, BLACK, (j*STONE_SIZE+STONE_SIZE//2, i*STONE_SIZE+STONE_SIZE//2), STONE_SIZE//2-2)
             elif board[i][j] == '2':
                 pygame.draw.circle(screen, WHITE, (j*STONE_SIZE+STONE_SIZE//2, i*STONE_SIZE+STONE_SIZE//2), STONE_SIZE//2-2)
+            elif board[i][j] == 'w':
+                pygame.draw.circle(screen, GOLD, (j*STONE_SIZE+STONE_SIZE//2, i*STONE_SIZE+STONE_SIZE//2), STONE_SIZE//2-2)
 # def draw_board():
 #     for i in range(BOARD_SIZE):
 #         for j in range(BOARD_SIZE):
@@ -40,8 +43,14 @@ def cross():
             board[i+1][j-1] == board[i+2][j-2] and \
             board[i+2][j-2] == board[i+3][j-3] and \
             board[i+3][j-3] == board[i+4][j-4]:
-                    print('역대각선 yes!')
-                    return True
+
+                board[i][j] = "w"
+                board[i+1][j-1] = "w"
+                board[i+2][j-2] = "w"
+                board[i+3][j-3] = "w"
+                board[i+4][j-4] = "w"
+                print('역대각선 yes!')
+                return True
 
     for i in range(4, BOARD_SIZE):
         for j in range(4, BOARD_SIZE):
@@ -50,6 +59,18 @@ def cross():
             board[i-1][j-1] == board[i-2][j-2] and \
             board[i-2][j-2] == board[i-3][j-3] and \
             board[i-3][j-3] == board[i-4][j-4]:
+                board[i][j] = "w"
+                board[i-1][j-1] = "w"
+                board[i-2][j-2] = "w"
+                board[i-3][j-3] = "w"
+                board[i-4][j-4] = "w"
+
+
+
+
+
+
+
                 print('정대각선yes!')
                 return True
 
@@ -60,6 +81,18 @@ def cross():
             board[i][j+1] == board[i][j+2] and \
             board[i][j+2] == board[i][j+3] and \
             board[i][j+3] == board[i][j+4]:
+                board[i][j] = "w"
+                board[i][j+1] = "w"
+                board[i][j+2] = "w"
+                board[i][j+3] = "w"
+                board[i][j+4] = "w"
+
+
+
+
+
+
+
                 print('가로yes!')
                 return True
     for j in range(BOARD_SIZE):
@@ -69,6 +102,17 @@ def cross():
             board[i+1][j] == board[i+2][j] and \
             board[i+2][j] == board[i+3][j] and \
             board[i+3][j] == board[i+4][j]:
+                board[i][j] = "w"
+                board[i+1][j] = "w"
+                board[i+2][j] = "w"
+                board[i+3][j] = "w"
+                board[i+4][j] = "w"
+
+
+
+
+
+
                 print('세로yes!')
                 return True
 # for i in range(11):
@@ -89,6 +133,7 @@ while running:
                 board[i][j] = current_player
                 if cross():
                     print("플레이어 {} 승리!".format(current_player))
+                   
                     running = False
                 current_player = 3 - current_player  # 1 -> 2, 2 -> 1
             else:
@@ -99,4 +144,5 @@ while running:
     pygame.display.update()
 
 cross()
+time.sleep(2)
 print(board)
