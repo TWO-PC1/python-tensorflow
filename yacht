@@ -1,0 +1,53 @@
+import random
+
+def roll_dice(n):
+    dice=[]
+    for i in range(n):
+        dice.append(random.randint(1,6))
+    return dice
+
+def is_yacht(dice):
+    if dice[0]==dice[1]==dice[2]==dice[3]==dice[4]:
+        return True
+    else:
+        return False
+
+
+
+
+
+def keep_dice(dice):    
+    keep = input('주사위를 안굴릴번호를 입력하세요')
+    keep=keep.split(',')
+    keep=list(keep)
+    for value in keep:
+        i=keep.index(value)
+
+        keep[i]=int(value)-1
+    return keep
+
+
+def reroll(keep):
+    dice=[]
+    for i in range(5):
+        if i not in keep:
+            dice.append(random.randint(1,6))
+
+        else:
+            i=keep.index(i)
+            dice.append(keep[i]) 
+    return dice
+
+
+def main():
+    dice = roll_dice(5)
+    while not is_yacht(dice):
+        
+
+        print(dice)
+        keep=keep_dice(dice)
+        akeep=reroll(keep)
+        dice=akeep
+        print(dice)
+
+main()
